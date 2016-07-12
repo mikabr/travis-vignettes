@@ -2,7 +2,7 @@
 set -e
 
 # Only run on pushes to master
-if [ "${TRAVIS_BRANCH}" != "master" || "${TRAVIS_EVENT_TYPE}" != "push" ]; then
+if [ "${TRAVIS_BRANCH}" != "master" -o "${TRAVIS_EVENT_TYPE}" != "push" ]; then
   echo "skipping deploy"
   exit 0
 fi
@@ -21,11 +21,14 @@ PKGNAME=$(echo "${PKG}" | cut -d _ -f 1)
 
 # Set up repo that will allow pushes to gh-pages branch
 
-# TODO: process for specifying $AUTHOR_EMAIL in .travis.yaml
-# TODO: process for adding github token to .travis.yaml
-# travis encrypt -r username/reponame GH_TOKEN=[token] --add
+# TODO: process for adding deploy key to .travis.yaml
+# sudo gem install travis
+# ssh-keygen -t rsa -b 4096 -f deploy_key
+# travis encrypt-file -r username/reponame deploy_key --add
 
-REPO="https://${GH_TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git"
+chmod 600 ../deploy_key
+ssh-add ../deploy_key
+REPO="ssh://git@github.com/${TRAVIS_REPO_SLUG}.git"
 
 DIR="_vignettes"
 mkdir "${DIR}"
@@ -39,7 +42,6 @@ git remote add upstream "${REPO}"
 git fetch upstream
 
 GH_EXIST=$(git ls-remote --heads "${REPO}" gh-pages | wc -l)
-echo $GH_EXIST
 
 if [ $GH_EXIST == "1" ]; then
   git reset upstream/gh-pages

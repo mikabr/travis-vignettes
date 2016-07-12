@@ -1,6 +1,11 @@
 language: r
+env:
+  global:
+  - AUTHOR_EMAIL=mika.br@gmail.com
 before_install:
-  - chmod 755 ./.push_gh_pages.sh
-  - cd testpackage
+- openssl aes-256-cbc -K $encrypted_26fdeeaa466a_key -iv $encrypted_26fdeeaa466a_iv
+  -in deploy_key.enc -out deploy_key -d
+- chmod 755 ./.push_gh_pages.sh
+- cd testpackage
 after_success:
-  - ../.push_gh_pages.sh
+- ../.push_gh_pages.sh
