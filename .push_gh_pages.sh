@@ -11,13 +11,13 @@ fi
 PKG=$(ls -1t *.tar.gz | head -n 1)
 
 # Get the package's name
-# TODO: is package archive guaranteed to be pkgname_[whatever]?
 PKGNAME=$(echo "${PKG}" | cut -d _ -f 1)
 
+######
 # Extract the package's contents
 # TODO: potential namespace collision with original package dir?
-tar xfz "${PKG}"
-
+#tar xfz "${PKG}"
+######
 
 # Set up repo that will allow pushes to gh-pages branch
 
@@ -49,7 +49,8 @@ fi
 
 
 # Copy all rendered vignettes from package to repo
-cp ../"${PKGNAME}"/inst/doc/*.html .
+#cp ../"${PKGNAME}"/inst/doc/*.html .
+cp ../"${PKGNAME}".Rcheck/00_pkg_src/"${PKGNAME}"/inst/doc/*.html .
 
 # Add/commit/push changes
 git add --all .

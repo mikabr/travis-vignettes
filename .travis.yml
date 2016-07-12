@@ -1,0 +1,6 @@
+language: r
+before_install:
+  - chmod 755 ./.push_gh_pages.sh
+  - cd testpackage
+after_success:
+  - ../.push_gh_pages.sh
