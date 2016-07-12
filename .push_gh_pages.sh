@@ -1,5 +1,6 @@
 #!/bin/bash
 set -e
+set -x
 
 # Only run on pushes to master
 if [ "${TRAVIS_BRANCH}" != "master" -o "${TRAVIS_EVENT_TYPE}" != "push" ]; then
