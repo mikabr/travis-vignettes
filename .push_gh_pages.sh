@@ -27,6 +27,7 @@ PKGNAME=$(echo "${PKG}" | cut -d _ -f 1)
 # travis encrypt-file -r username/reponame deploy_key --add
 
 chmod 600 ../deploy_key
+eval `ssh-agent -s`
 ssh-add ../deploy_key
 REPO="ssh://git@github.com/${TRAVIS_REPO_SLUG}.git"
 
