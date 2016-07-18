@@ -14,22 +14,20 @@ PKG=$(ls -1t *.tar.gz | head -n 1)
 # Get the package's name
 PKGNAME=$(echo "${PKG}" | cut -d _ -f 1)
 
-######
-# Extract the package's contents
-# TODO: potential namespace collision with original package dir?
-#tar xfz "${PKG}"
-######
-
 # Set up repo that will allow pushes to gh-pages branch
 
 # TODO: process for adding deploy key to .travis.yaml
 # sudo gem install travis
 # ssh-keygen -t rsa -b 4096 -f deploy_key
 # travis encrypt-file -r username/reponame deploy_key --add
+# add deploy key to repo in settings on github
 
-chmod 600 ../deploy_key
+#openssl aes-256-cbc -K $encrypted_26fdeeaa466a_key -iv $encrypted_26fdeeaa466a_iv
+#  -in deploy_key.enc -out deploy_key -d
+echo ${DEPLOY_KEY} > deploy_key
+chmod 600 deploy_key
 eval `ssh-agent -s`
-ssh-add ../deploy_key
+ssh-add deploy_key
 REPO="ssh://git@github.com/${TRAVIS_REPO_SLUG}.git"
 
 DIR="_vignettes"
@@ -53,7 +51,7 @@ fi
 
 
 # Copy all rendered vignettes from package to repo
-#cp ../"${PKGNAME}"/inst/doc/*.html .
+# TODO: get Rmd files instead and re-render (if we want to change style)
 cp ../"${PKGNAME}".Rcheck/00_pkg_src/"${PKGNAME}"/inst/doc/*.html .
 
 # Add/commit/push changes
