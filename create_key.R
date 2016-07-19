@@ -66,8 +66,9 @@ env:
 before_install:
   - cd testpackage
 after_success:
-  - chmod 755 ../.push_gh_pages.sh
-  - ../.push_gh_pages.sh',
+  - cd ..
+  - chmod 755 .push_gh_pages.sh
+  - ./.push_gh_pages.sh',
     author_email, enc_id)
   writeLines(yaml, ".travis.yml")
 
