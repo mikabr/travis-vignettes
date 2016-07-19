@@ -27,7 +27,7 @@ setup_travis <- function(owner, repo, author_email) {
 
   # add public key to repo deploy keys on GitHub
   key_data <- list(
-    "title" = "travis",  # TODO: put in datetime?
+    "title" = paste("travis", Sys.time()),
     "key" = as.list(public_key)$ssh,
     "read_only" = FALSE
   )
@@ -42,13 +42,18 @@ setup_travis <- function(owner, repo, author_email) {
   iv <- openssl::rand_bytes(16)
 
   # encrypt private key using tempkey and iv
-  openssl::write_pem(key, "deploy_key")
+  openssl::write_pem(key, "deploy_key", password = NULL)
   blob <- openssl::aes_cbc_encrypt("deploy_key", tempkey, iv)
-  writeBin(blob, file("deploy_key.enc", "wb")) # TODO: write problems
+  attr(blob, "iv") <- NULL
+  #openssl::base64_encode(blob)
+  #writeBin(openssl::base64_encode(blob), "deploy_key.enc")
+  writeBin(blob, "deploy_key.enc")
 
   # add tempkey and iv as secure environment variables on travis
-  set_env_var(repo_slug, sprintf("encrypted_%s_key", enc_id), tempkey)
-  set_env_var(repo_slug, sprintf("encrypted_%s_iv", enc_id), iv)
+  set_env_var(repo_slug, sprintf("encrypted_%s_key", enc_id),
+              openssl::base64_encode(tempkey))
+  set_env_var(repo_slug, sprintf("encrypted_%s_iv", enc_id),
+              openssl::base64_encode(iv))
 
   # write travis yaml
   # TODO: modify existing yaml
@@ -63,7 +68,7 @@ before_install:
 after_success:
   - chmod 755 ../.push_gh_pages.sh
   - ../.push_gh_pages.sh',
-    author_email, var_id)
+    author_email, enc_id)
   writeLines(yaml, ".travis.yml")
 
 }
