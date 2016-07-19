@@ -16,18 +16,15 @@ PKGNAME=$(echo "${PKG}" | cut -d _ -f 1)
 
 # Set up repo that will allow pushes to gh-pages branch
 
-# TODO: process for adding deploy key to .travis.yaml
-# sudo gem install travis
-# ssh-keygen -t rsa -b 4096 -f deploy_key
-# travis encrypt-file -r username/reponame deploy_key --add
-# add deploy key to repo in settings on github
-
-#openssl aes-256-cbc -K $encrypted_26fdeeaa466a_key -iv $encrypted_26fdeeaa466a_iv
-#  -in deploy_key.enc -out deploy_key -d
-echo ${DEPLOY_KEY} > deploy_key
+ENCRYPTED_KEY_VAR="encrypted_${ENCRYPTION_LABEL}_key"
+ENCRYPTED_IV_VAR="encrypted_${ENCRYPTION_LABEL}_iv"
+ENCRYPTED_KEY=${!ENCRYPTED_KEY_VAR}
+ENCRYPTED_IV=${!ENCRYPTED_IV_VAR}
+openssl aes-256-cbc -K $ENCRYPTED_KEY -iv $ENCRYPTED_IV -in deploy_key.enc -out deploy_key -d
 chmod 600 deploy_key
 eval `ssh-agent -s`
 ssh-add deploy_key
+
 REPO="ssh://git@github.com/${TRAVIS_REPO_SLUG}.git"
 
 DIR="_vignettes"
