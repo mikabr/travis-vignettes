@@ -2,7 +2,7 @@ language: r
 env:
   global:
     - AUTHOR_EMAIL=mika.br@gmail.com
-    - ENCRYPTION_LABEL=W13win5ekixQ
+    - ENCRYPTION_LABEL=bef1321be316
 before_install:
   - cd testpackage
 after_success:
