@@ -2,10 +2,9 @@ language: r
 env:
   global:
     - AUTHOR_EMAIL=mika.br@gmail.com
-    - ENCRYPTION_LABEL=bef1321be316
+    - ENCRYPTION_LABEL=W13win5ekixQ
 before_install:
   - cd testpackage
 after_success:
-  - cd ..
-  - chmod 755 .push_gh_pages.sh
-  - ./.push_gh_pages.sh
+  - chmod 755 ../.push_gh_pages.sh
+  - ../.push_gh_pages.sh

@@ -51,9 +51,9 @@ setup_travis <- function(owner, repo, author_email) {
 
   # add tempkey and iv as secure environment variables on travis
   set_env_var(repo_slug, sprintf("encrypted_%s_key", enc_id),
-              openssl::base64_encode(tempkey))
+              paste(tempkey, collapse = ""))
   set_env_var(repo_slug, sprintf("encrypted_%s_iv", enc_id),
-              openssl::base64_encode(iv))
+              paste(iv, collapse = ""))
 
   # write travis yaml
   # TODO: modify existing yaml
@@ -66,9 +66,8 @@ env:
 before_install:
   - cd testpackage
 after_success:
-  - cd ..
-  - chmod 755 .push_gh_pages.sh
-  - ./.push_gh_pages.sh',
+  - chmod 755 ../.push_gh_pages.sh
+  - ../.push_gh_pages.sh',
     author_email, enc_id)
   writeLines(yaml, ".travis.yml")
 
