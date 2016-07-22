@@ -33,6 +33,7 @@ DIR="_vignettes"
 mkdir "${DIR}"
 cd "${DIR}"
 
+# TODO: is this right way to set up? any way to fetch only gh-pages branch?
 git init
 git config user.name "Travis CI"
 git config user.email "${AUTHOR_EMAIL}"
