@@ -14,8 +14,6 @@ PKG=$(ls -1t *.tar.gz | head -n 1)
 # Get the package's name
 PKGNAME=$(echo "${PKG}" | cut -d _ -f 1)
 
-cd ..
-
 # Set up repo that will allow pushes to gh-pages branch
 
 ENCRYPTED_KEY_VAR="encrypted_${ENCRYPTION_LABEL}_key"
@@ -52,10 +50,10 @@ fi
 
 # Copy all rendered vignettes from package to repo
 # TODO: get Rmd files instead and re-render (if we want to change style)
-cp ../${PKGNAME}/${PKGNAME}.Rcheck/00_pkg_src/${PKGNAME}/inst/doc/*.html .
+cp ../${PKGNAME}.Rcheck/00_pkg_src/${PKGNAME}/inst/doc/*.html .
 
 # Add/commit/push changes
 git add --all .
 # TODO: master commit in message? custom commit message?
-git commit -m "deployed to github pages"
+git commit -m "deploy to github pages"
 git push --quiet upstream HEAD:gh-pages
